@@ -8,9 +8,9 @@ os.chdir(here)
 
 setup (name = "thermo",
        version='1.0',
-       description = "Package to draw Themrodynamic diagrams with VCS",
+       description = "Package to draw Thermodynamic diagrams with VCS",
        url = "http://cdat.sf.net",
        packages = ['thermo'],
        package_dir = {'thermo': 'Lib'},
-       
+       data_files = [("share/thermo",["share/test_data_files.txt"])],
       )

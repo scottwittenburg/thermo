@@ -996,11 +996,11 @@ class Gth(object):
         X = numpy.ma.arange(self.detail, dtype=MV2.float)
         X = X * dX / (self.detail - 1) + self.xmin
         Xaxis = cdms2.createAxis(X)
-        X = numpy.ma.resize(X, (self.detail, self.detail))
+        X = numpy.ma.resize(X, (int(self.detail), int(self.detail)))
         Y = numpy.ma.arange(self.detail, dtype=MV2.float)
         Y = Y * dY / (self.detail - 1) + self.ymin
         Yaxis = cdms2.createAxis(Y)
-        Y = numpy.ma.resize(Y, (self.detail, self.detail))
+        Y = numpy.ma.resize(Y, (int(self.detail), int(self.detail)))
         Y = numpy.ma.transpose(Y)
 
         # Computes T,P on this grid
