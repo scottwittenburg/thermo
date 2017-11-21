@@ -20,7 +20,7 @@ class ThermoTest(basetest.BaseGraphicsTest):
             pass
 
         if not failed:
-            print failed
+            print(failed)
             raise "Error should have raised an exception on all missing data!"
 
         th.clear()

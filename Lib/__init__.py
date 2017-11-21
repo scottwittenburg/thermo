@@ -1,1 +1,1 @@
-from thermo import *  # noqa
+from .thermo import *  # noqa

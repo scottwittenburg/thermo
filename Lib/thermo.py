@@ -412,35 +412,35 @@ class Gth(object):
         self._line = self.x.createline()
 
     def list(self):
-        print '----------ThermodynamicDiagram (Gth) member (attribute) listings----------'
-        print 'graphic method = Gth'
-        print 'name =', self.name
-        print 'type =', self.type
+        print('----------ThermodynamicDiagram (Gth) member (attribute) listings----------')
+        print('graphic method = Gth')
+        print('name =', self.name)
+        print('type =', self.type)
         if self.type[:2] == 'sk':
-            print 'skewness:', self.skewness
-        print 'detail =', self.detail
-        print 'datawc_x1 =', self.datawc_x1
-        print 'datawc_x2 =', self.datawc_x2
-        print 'datawc_y1 =', self.datawc_y1
-        print 'datawc_y2 =', self.datawc_y2
-        print 'Pmaxmixingratio =', self.Pmaxmixingratio
-        print 'isotherms =', self.isotherms.name
-        print 'drawisotherms =', self.drawisotherms
-        print 'isothermsfilled =', self.isothermsfilled.name
-        print 'drawisothermsfilled =', self.drawisothermsfilled
-        print 'isobars =', self.isobars.name
-        print 'drawisobars =', self.drawisobars
-        print 'dryadiabats =', self.dryadiabats.name
-        print 'drawdryadiabats =', self.drawdryadiabats
-        print 'pseudoadiabats =', self.pseudoadiabats.name
-        print 'drawpseudoadiabats =', self.drawpseudoadiabats
-        print 'mixingratio =', self.mixingratio.name
-        print 'drawmixingratio =', self.drawmixingratio
+            print('skewness:', self.skewness)
+        print('detail =', self.detail)
+        print('datawc_x1 =', self.datawc_x1)
+        print('datawc_x2 =', self.datawc_x2)
+        print('datawc_y1 =', self.datawc_y1)
+        print('datawc_y2 =', self.datawc_y2)
+        print('Pmaxmixingratio =', self.Pmaxmixingratio)
+        print('isotherms =', self.isotherms.name)
+        print('drawisotherms =', self.drawisotherms)
+        print('isothermsfilled =', self.isothermsfilled.name)
+        print('drawisothermsfilled =', self.drawisothermsfilled)
+        print('isobars =', self.isobars.name)
+        print('drawisobars =', self.drawisobars)
+        print('dryadiabats =', self.dryadiabats.name)
+        print('drawdryadiabats =', self.drawdryadiabats)
+        print('pseudoadiabats =', self.pseudoadiabats.name)
+        print('drawpseudoadiabats =', self.drawpseudoadiabats)
+        print('mixingratio =', self.mixingratio.name)
+        print('drawmixingratio =', self.drawmixingratio)
 # print 'windbarbs =',self.windbarbs.name
-        print 'windbarbsscales =', self.windbarbsscales
-        print 'linecolor', self.line.color[0]
-        print 'linewidth', self.line.width[0]
-        print 'linetype', self.line.type[0]
+        print('windbarbsscales =', self.windbarbsscales)
+        print('linecolor', self.line.color[0])
+        print('linewidth', self.line.width[0])
+        print('linetype', self.line.type[0])
 
     __slots__ = [
         '_TP2XY',
@@ -450,52 +450,22 @@ class Gth(object):
         # 'TP2XYtephigram',
         # 'TP2XYstuve',
         'gname',
-        'name',
         '_name',
-        'displays',
         '_displays',
-        'detail',
         '_detail',
         'R',
         'cp',
         'k',
-        'datawc_x1',
-        'datawc_x2',
-        'datawc_y1',
-        'datawc_y2',
         '_datawc_x1',
         '_datawc_x2',
         '_datawc_y1',
         '_datawc_y2',
-        'type',
         '_type',
         'xmin',
         'xmax',
         'ymin',
         'ymax',
         'x',
-        'Pmaxmixingratio',
-        'isotherms',
-        'drawisotherms',
-        'isothermsfilled',
-        'drawisothermsfilled',
-        'isobars',
-        'drawisobars',
-        'dryadiabats',
-        'drawdryadiabats',
-        'pseudoadiabats',
-        'drawpseudoadiabats',
-        'mixingratio',
-        'drawmixingratio',
-        'windbarbs',
-        'windbarbsscales',
-        'skewness',
-        'linecolor',
-        'linewidth',
-        'line',
-        'linecolor',
-        'linewidth',
-        'linetype',
         '_Pmaxmixingratio',
         '_isotherms',
         '_drawisotherms',
@@ -622,7 +592,7 @@ class Gth(object):
         return self._line.width
 
     def _setlinewidth(self, value):
-        if not isinstance(value, (int, float, long)):
+        if not isinstance(value, (int, float)):
             raise 'Error width must be a number'
         if not 1 < value < 300:
             raise 'Error width must be between 1 and 300'
