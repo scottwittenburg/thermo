@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-PKG_NAME=wk
+PKG_NAME=thermo
 USER=uvcdat
 VERSION="2.12"
 echo "Trying to upload conda"
