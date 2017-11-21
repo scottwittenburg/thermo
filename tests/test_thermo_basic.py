@@ -65,7 +65,7 @@ class ThermoTest(basetest.BaseGraphicsTest):
         p.id='level'
         t.setAxis(1,p) # Reset the axis on T
         th.plot_TP(t,template=template)
-        self.checkImage("test_thermo_basic_1")
+        self.checkImage("test_thermo_basic_1.png")
 
         # Create a template for the windbarbs
         template=self.x.createtemplate('new2')
@@ -78,7 +78,7 @@ class ThermoTest(basetest.BaseGraphicsTest):
         template.box1.y1=template.data.y1
         template.box1.y2=template.data.y2
         template.xlabel1.y=template.data.y1*.9
-        template.ylabel1.y=template.data.x1*.9
+        template.ylabel1.x=template.data.x1*.9
 
 
         # Read winds from a file
@@ -91,5 +91,5 @@ class ThermoTest(basetest.BaseGraphicsTest):
         # Plot the windbarbs, passing the P values (in Pa)
 
         th.plot_windbarb(u,v,P=u.getLevel()[:]*100.,template=template)
-        self.checkImage("test_thermo_basic_windbarbs")
+        self.checkImage("test_thermo_basic_windbarbs.png")
 

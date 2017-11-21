@@ -370,36 +370,36 @@ class Gth(object):
                                         [120, 130], [140, 150], [160, 170],
                                         [180, 190], [200, 210]]
 #         self.isothermsfilled.levels=([-240.0, -200.0], [-160.0, -120.0], [-80.0, -40.0], [0.0, 40.0], [80.0, 120.0])
-        self._isothermsfilled.fillareacolors = [253, ] * 50
+        self._isothermsfilled.fillareacolors = ["light green", ] * 50
         self._isothermsfilled.xticlabels1 = {}
         self._isothermsfilled.yticlabels1 = {}
 
         # Isotherms
         self._isotherms.level = list(range(-200, 200, 10))
-        self._isotherms.linecolors = [249, ]
+        self._isotherms.linecolors = ['brown', ]
         self._isotherms.line = ['solid']
         self._isotherms.label = 'y'
 
         # Isobars default settings
-        self._isobars.linecolors = [249]
+        self._isobars.linecolors = ['brown']
         self._isobars.line = ['solid']
         self._isobars.label = 'n'
 
         # Dry adiabatics
         self._dryadiabats.label = 'y'
-        self._dryadiabats.linecolors = [249, ]
+        self._dryadiabats.linecolors = ['brown', ]
         self._dryadiabats.line = ['solid']
 # self._dryadiabats.level=range(-40,170,10)
 
         # Pseudoadiabatics
-        self._pseudoadiabats.linecolors = [243, ]
+        self._pseudoadiabats.linecolors = ["DarkGreen", ]
         self._pseudoadiabats.line = ['solid']
         self._pseudoadiabats.label = 'y'
 # self._pseudoadiabats.level=vcs.mkevenlevels(-40,40,40)
 
         # Mixing ratio
         self._mixingratio.line = ['long-dash']
-        self._mixingratio.linecolors = [243, ]
+        self._mixingratio.linecolors = ["DarkGreen", ]
         self._mixingratio.level = [.1, .2, .4, .6, .8, 1., 1.5, 2., 2.5,
                                    3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20,
                                    24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 68]
@@ -412,7 +412,7 @@ class Gth(object):
         self._line = self.x.createline()
 
     def list(self):
-        print '----------ThermodynamicDiagrma (Gth) member (attribute) listings----------'
+        print '----------ThermodynamicDiagram (Gth) member (attribute) listings----------'
         print 'graphic method = Gth'
         print 'name =', self.name
         print 'type =', self.type
@@ -864,7 +864,7 @@ class Gth(object):
             xs.append(tmpxs)
             ys.append(tmpys)
         l = self.x.createline()
-        l.color = self.pseudoadiabats.linecolors[0]
+        l.color = [self.pseudoadiabats.linecolors[0],]
         l.viewport = [template.data.x1, template.data.x2, template.data.y1, template.data.y2]
         l.worldcoordinate = [self.xmin, self.xmax, self.ymin, self.ymax]
         l.x = xs
@@ -956,7 +956,7 @@ class Gth(object):
                 iso.linecolors = col
                 iso.line = [iso.line[0], ] * len(values)
                 if iso.text is None:
-                    iso.text = [1, ] * len(values)
+                    iso.text = ["default", ] * len(values)
                 else:
                     iso.text = [iso.text[0], ] * len(values)
                 iso.textcolors = col
@@ -1235,7 +1235,7 @@ class Gth(object):
                 x, y = self.make_barb(n[i], d[i], n1[i], n2[i], n3[i], rw * r * rv, Y)
                 lin.x = x
                 lin.y = y
-                lin.linetype = ['solid']
+                lin.type = ['solid']
                 self.displays.append(self.x.plot(lin, bg=bg))
 
     def make_barb(self, n, d, n1, n2, n3, ydeformation, yoff):
