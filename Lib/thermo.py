@@ -377,28 +377,28 @@ class Gth(object):
         # Isotherms
         self._isotherms.level = list(range(-200, 200, 10))
         self._isotherms.linecolors = ['brown', ]
-        self._isotherms.line = ['solid']
+        self._isotherms.linetypes = ['solid']
         self._isotherms.label = 'y'
 
         # Isobars default settings
         self._isobars.linecolors = ['brown']
-        self._isobars.line = ['solid']
+        self._isobars.linetypes = ['solid']
         self._isobars.label = 'n'
 
         # Dry adiabatics
         self._dryadiabats.label = 'y'
         self._dryadiabats.linecolors = ['brown', ]
-        self._dryadiabats.line = ['solid']
+        self._dryadiabats.linetypes = ['solid']
 # self._dryadiabats.level=range(-40,170,10)
 
         # Pseudoadiabatics
         self._pseudoadiabats.linecolors = ["DarkGreen", ]
-        self._pseudoadiabats.line = ['solid']
+        self._pseudoadiabats.linetypes = ['solid']
         self._pseudoadiabats.label = 'y'
 # self._pseudoadiabats.level=vcs.mkevenlevels(-40,40,40)
 
         # Mixing ratio
-        self._mixingratio.line = ['long-dash']
+        self._mixingratio.linetypes = ['long-dash']
         self._mixingratio.linecolors = ["DarkGreen", ]
         self._mixingratio.level = [.1, .2, .4, .6, .8, 1., 1.5, 2., 2.5,
                                    3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20,
@@ -924,7 +924,7 @@ class Gth(object):
                 iso.level = values
                 col = [iso.linecolors[0], ] * len(values)
                 iso.linecolors = col
-                iso.line = [iso.line[0], ] * len(values)
+                iso.linetypes = [iso.linetypes[0], ] * len(values)
                 if iso.text is None:
                     iso.text = ["default", ] * len(values)
                 else:
