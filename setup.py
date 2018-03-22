@@ -7,7 +7,7 @@ os.chdir(os.path.join('..','..','..'))
 os.chdir(here)
 
 setup (name = "thermo",
-       version='1.0',
+       version='8.0',
        description = "Package to draw Thermodynamic diagrams with VCS",
        url = "http://cdat.sf.net",
        packages = ['thermo'],
