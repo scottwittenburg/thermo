@@ -77,6 +77,6 @@ jobs:
 
 workflows:
   version: 2
-  nightly:
+  thermo:
     jobs:
       - macos_thermo
