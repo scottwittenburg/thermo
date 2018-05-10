@@ -243,8 +243,7 @@ if args.html or args.package or args.dropbox:
                 print("<div id='diff'><img src='%s' alt='diff file'></div>" % abspath(
                     diff, nm, "diff"), file=fe)
                 print("<div><a href='index.html'>Back To Results List</a></div>", file=fe)
-        print('<div id="output"><h1>Log</h1><pre>%s</pre></div>' % "\n".join(result[
-                                                                                  "log"]), file=fe)
+        print('<div id="output"><h1>Log</h1><pre>%s</pre></div>' % "\n".join(result["log"].decode()), file=fe)
         print("<a href='index.html'>Back To Results List</a>", file=fe)
         print("</body></html>", file=fe)
         fe.close()
