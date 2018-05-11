@@ -49,8 +49,7 @@ aliases:
        python run_tests.py -n 2 -H
        echo "*** py3 test result: "$?
        RESULT=$(( $RESULT + $? ))
-       #exit $RESULT
-       exit 1
+       exit $RESULT
 
   - &conda_upload
     name: conda_upload
@@ -125,8 +124,8 @@ workflows:
       - macos_thermo:
           filters:
             branches:
-              only: migrateToCircleCI2
+              only: master
       - linux_thermo:
           filters:
             branches:
-              only: migrateToCircleCI2
+              only: master
