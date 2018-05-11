@@ -40,6 +40,7 @@ aliases:
     name: run_thermo_tests
     command: |
        export PATH=$WORKDIR/miniconda/bin:$PATH
+       mkdir tests_png tests_html
        export UVCDAT_ANONYMOUS_LOG=False
        source activate py2
        python run_tests.py -v2 -n 2 -H
