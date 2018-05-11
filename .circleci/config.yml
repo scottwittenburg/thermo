@@ -54,6 +54,9 @@ aliases:
   - &conda_upload
     name: conda_upload
     command: |
+       if [[ $CIRCLE_BRANCH == 'migrateToCircleCI2' ]]; then
+          exit 0
+       fi
        export PATH=${HOME}/project/$WORKDIR/miniconda/bin:$PATH
        echo "WORKDIR: "$WORKDIR
        pwd
@@ -117,15 +120,10 @@ jobs:
           path: tests_png
           destination: tests_png
 
+
 workflows:
   version: 2
   thermo:
     jobs:
-      - macos_thermo:
-          filters:
-            branches:
-              only: master
-      - linux_thermo:
-          filters:
-            branches:
-              only: master
+      - macos_thermo
+      - linux_thermo
