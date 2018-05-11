@@ -54,6 +54,9 @@ aliases:
   - &conda_upload
     name: conda_upload
     command: |
+       # only do conda_upload if test passed
+       if [ $RESULT -ne 0 ]; then
+          exit $RESULT
        export PATH=$WORKDIR/miniconda/bin:$PATH
        export PKG_NAME=thermo
        export USER=cdat
@@ -97,6 +100,7 @@ jobs:
       xcode: "9.2.0"
     environment:
       WORKDIR: "workspace/test_macos_thermo"
+      OS: "osx-64"
     steps:
       - checkout
       - run: *setup_miniconda 
@@ -115,6 +119,7 @@ jobs:
       image: circleci/classic:latest
     environment:
       WORKDIR: "workspace/test_linux_thermo"
+      OS: "linux-64"
     steps:
       - checkout
       - run: *setup_miniconda 
@@ -133,16 +138,10 @@ workflows:
   thermo:
     jobs:
       - macos_thermo
-      - deploy_mac:
           filters:
             branches:
               only: migrateToCircleCI2
-          requires:
-            - macos_thermo
       - linux_thermo
-      - deploy_linux:
           filters:
             branches:
               only: migrateToCircleCI2
-          requires:
-            - linux_thermo
