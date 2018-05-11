@@ -22,8 +22,7 @@ parser.add_argument("-H", "--html", action="store_true",
                     help="create and show html result page")
 parser.add_argument("-p", "--package", action="store_true",
                     help="package test results")
-parser.add_argument("-D", "--dropbox", action="store_true",
-                    help="upload packaged test results to dropbox (access token must be stored in the envirnoment variable DROPBOX_TOKEN)")
+
 parser.add_argument(
     "-c",
     "--coverage",
@@ -176,6 +175,13 @@ if len(names)==0:
 # Make sure we have sample data
 cdat_info.download_sample_data_files(os.path.join(sys.prefix,"share","thermo","test_data_files.txt"),cdat_info.get_sampledata_path())
 
+if args.html:
+    if not os.path.exists("tests_html"):
+        os.makedirs("tests_html")
+
+if not os.path.exists("tests_png"):
+    os.makedirs("tests_png")
+
 p = multiprocessing.Pool(args.cpus)
 outs = p.map(run_nose, names)
 results = {}
@@ -196,9 +202,8 @@ if args.verbosity > 0:
         print("Failed tests:")
         for f in failed:
             print("\t", f)
-if args.html or args.package or args.dropbox:
-    if not os.path.exists("tests_html"):
-        os.makedirs("tests_html")
+
+if args.html or args.package:
     os.chdir("tests_html")
 
     js = image_compare.script_data()
@@ -265,7 +270,7 @@ if args.html or args.package or args.dropbox:
         webbrowser.open("file://%s/index.html" % os.getcwd())
     os.chdir(root)
 
-if args.package or args.dropbox:
+if args.package:
     import tarfile
     tnm = "results_%s_%s_%s.tar.bz2" % (os.uname()[0],os.uname()[1],time.strftime("%Y-%m-%d_%H:%M"))
     t = tarfile.open(tnm, "w:bz2")
@@ -274,12 +279,5 @@ if args.package or args.dropbox:
     t.close()
     if args.verbosity > 0:
         print("Packaged Result Info in:", tnm)
-if args.dropbox: 
-    import dropbox
-    dbx = dropbox.Dropbox(os.environ.get("DROPBOX_TOKEN",""))
-    f=open(tnm,"rb")
-    dbx.files_upload(f.read(),"/%s"%tnm)
-    f.close()
-
 
 sys.exit(len(failed))
