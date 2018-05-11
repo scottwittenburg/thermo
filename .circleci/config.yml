@@ -49,12 +49,15 @@ aliases:
        python run_tests.py -n 2 -H
        echo "*** py3 test result: "$?
        RESULT=$(( $RESULT + $? ))
-       exit $RESULT
+       echo $RESULT >> test_result
 
   - &conda_upload
     name: conda_upload
     command: |
        export PATH=$WORKDIR/miniconda/bin:$PATH
+       if [[ `cat test_result` != 0 ]]; then
+          exit 0
+       fi
        export PKG_NAME=thermo
        export USER=cdat
        export VERSION=8.0
@@ -72,29 +75,6 @@ aliases:
        anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l $LABEL $CONDA_BLD_PATH/$OS/$PKG_NAME-$VERSION.`date +%Y*`0.tar.bz2 --force
 
 jobs:
-  deploy_mac:
-    macos:
-      xcode: "9.2.0"
-    environment:
-      WORKDIR: "/tmp/workspace/test_macos_thermo"
-      OS: "osx-64"
-    steps:
-      #- checkout
-      - attach_workspace:
-          at: /tmp/workspace
-      - run: *conda_upload
-
-  deploy_linux:
-    machine:
-      image: circleci/classic:latest
-    environment:
-      WORKDIR: "/tmp/workspace/test_linux_thermo"
-      OS: "linux-64"
-    steps:
-      #- checkout
-      - attach_workspace:
-          at: /tmp/workspace
-      - run: *conda_upload
 
   macos_thermo:
     macos:
@@ -108,16 +88,13 @@ jobs:
       - run: *create_conda_env
       - run: *setup_thermo
       - run: *run_thermo_tests
+      - run: *conda_upload
       - store_artifacts:
           path: tests_html
           destination: tests_html
       - store_artifacts:
           path: tests_png
           destination: tests_png
-      - persist_to_workspace:
-           root: workspace
-           paths:
-              - test_macos_thermo
 
   linux_thermo:
     machine:
@@ -131,32 +108,23 @@ jobs:
       - run: *create_conda_env
       - run: *setup_thermo
       - run: *run_thermo_tests
+      - run: *conda_upload
       - store_artifacts:
           path: tests_html
           destination: tests_html
       - store_artifacts:
           path: tests_png
           destination: tests_png
-      - persist_to_workspace:
-           root: workspace
-           paths:
-              - test_linux_thermo
 
 workflows:
   version: 2
   thermo:
     jobs:
       - macos_thermo
-      - deploy_mac:
           filters:
             branches:
               only: migrateToCircleCI2
-          requires:
-            - macos_thermo
       - linux_thermo
-      - deploy_linux:
           filters:
             branches:
               only: migrateToCircleCI2
-          requires:
-            - linux_thermo
