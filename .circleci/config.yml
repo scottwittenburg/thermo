@@ -115,13 +115,13 @@ jobs:
 
 workflows:
   version: 2
-    thermo:
-      jobs:
-        - macos_thermo
-            filters:
-              branches:
-                only: migrateToCircleCI2
-        - linux_thermo
-            filters:
-              branches:
-                only: migrateToCircleCI2
+  thermo:
+    jobs:
+      - macos_thermo:
+          filters:
+            branches:
+              only: migrateToCircleCI2
+      - linux_thermo:
+          filters:
+            branches:
+              only: migrateToCircleCI2
