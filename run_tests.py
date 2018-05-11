@@ -250,7 +250,6 @@ if args.html or args.package or args.dropbox:
                     diff, nm, "diff"), file=fe)
                 print("<div><a href='index.html'>Back To Results List</a></div>", file=fe)
         
-        #logs = list(map(lambda x: convert(x), result["log"]))
         result["log"] = list(map(lambda x: convert(x), result["log"]))
         print('<div id="output"><h1>Log</h1><pre>%s</pre></div>' % "\n".join(result["log"]), file=fe)
         print("<a href='index.html'>Back To Results List</a>", file=fe)
