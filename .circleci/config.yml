@@ -49,6 +49,9 @@ aliases:
        python run_tests.py -n 2 -H
        echo "**** py3 test result: "$?
        RESULT=$(( $RESULT + $? ))
+       TEST_VAR=1
+       source deactivate
+       echo "xxx xxx TEST_VAR: "${TEST_VAR}
        exit $RESULT
 
   - &conda_upload
