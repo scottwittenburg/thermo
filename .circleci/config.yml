@@ -54,7 +54,7 @@ aliases:
   - &conda_upload
     name: conda_upload
     command: |
-       if [[ $CIRCLE_BRANCH != 'migrateToCircleCI2' ]]; then
+       if [[ $CIRCLE_BRANCH != 'master' ]]; then
           exit 0
        fi
        export PATH=${HOME}/project/$WORKDIR/miniconda/bin:$PATH
@@ -66,8 +66,6 @@ aliases:
        export USER=cdat
        export VERSION=8.0
        export LABEL=nightly
-       #mkdir conda_build
-       #cd conda_build
        conda install conda-build anaconda-client
        conda config --set anaconda_upload no
        export CONDA_BLD_PATH=`pwd`/conda_build
