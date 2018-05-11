@@ -55,6 +55,9 @@ aliases:
     name: conda_upload
     command: |
        export PATH=$WORKDIR/miniconda/bin:$PATH
+       echo "WORKDIR: "$WORKDIR
+       ls $WORKDIR
+       which conda
        export PKG_NAME=thermo
        export USER=cdat
        export VERSION=8.0
