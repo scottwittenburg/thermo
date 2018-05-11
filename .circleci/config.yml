@@ -85,7 +85,7 @@ jobs:
       - run: *create_conda_env
       - run: *setup_thermo
       - run: *run_thermo_tests
-       - run: *conda_upload
+      - run: *conda_upload
       - store_artifacts:
           path: tests_html
           destination: tests_html
