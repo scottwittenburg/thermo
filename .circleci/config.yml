@@ -54,9 +54,6 @@ aliases:
   - &conda_upload
     name: conda_upload
     command: |
-       # only do conda_upload if test passed
-       if [ $RESULT -ne 0 ]; then
-          exit $RESULT
        export PATH=$WORKDIR/miniconda/bin:$PATH
        export PKG_NAME=thermo
        export USER=cdat
@@ -79,20 +76,24 @@ jobs:
     macos:
       xcode: "9.2.0"
     environment:
-      WORKDIR: "workspace/test_macos_thermo"
+      WORKDIR: "/tmp/workspace/test_macos_thermo"
       OS: "osx-64"
     steps:
-      - checkout
+      #- checkout
+      - attach_workspace:
+          at: /tmp/workspace
       - run: *conda_upload
 
   deploy_linux:
     machine:
       image: circleci/classic:latest
     environment:
-      WORKDIR: "workspace/test_linux_thermo"
+      WORKDIR: "/tmp/workspace/test_linux_thermo"
       OS: "linux-64"
     steps:
-      - checkout
+      #- checkout
+      - attach_workspace:
+          at: /tmp/workspace
       - run: *conda_upload
 
   macos_thermo:
@@ -113,6 +114,10 @@ jobs:
       - store_artifacts:
           path: tests_png
           destination: tests_png
+      - persist_to_workspace:
+           root: workspace
+           paths:
+              - test_macos_thermo
 
   linux_thermo:
     machine:
@@ -132,16 +137,26 @@ jobs:
       - store_artifacts:
           path: tests_png
           destination: tests_png
+      - persist_to_workspace:
+           root: workspace
+           paths:
+              - test_linux_thermo
 
 workflows:
   version: 2
   thermo:
     jobs:
       - macos_thermo
+      - deploy_mac:
           filters:
             branches:
               only: migrateToCircleCI2
+          requires:
+            - macos_thermo
       - linux_thermo
+      - deploy_linux:
           filters:
             branches:
               only: migrateToCircleCI2
+          requires:
+            - linux_thermo
