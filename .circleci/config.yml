@@ -49,9 +49,6 @@ aliases:
        python run_tests.py -n 2 -H
        echo "**** py3 test result: "$?
        RESULT=$(( $RESULT + $? ))
-       TEST_VAR=1
-       source deactivate
-       echo "xxx xxx TEST_VAR: "${TEST_VAR}
        exit $RESULT
 
   - &conda_upload
@@ -60,8 +57,7 @@ aliases:
        if [[ $CIRCLE_BRANCH != 'migrateToCircleCI2' ]]; then
           exit 0
        fi
-       #export PATH=${HOME}/project/$WORKDIR/miniconda/bin:$PATH
-       export PATH=$WORKDIR/miniconda/bin:$PATH
+       export PATH=${HOME}/project/$WORKDIR/miniconda/bin:$PATH
        echo "WORKDIR: "$WORKDIR
        pwd
        ls $WORKDIR
