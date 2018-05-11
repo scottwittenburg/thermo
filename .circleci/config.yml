@@ -49,15 +49,12 @@ aliases:
        python run_tests.py -n 2 -H
        echo "*** py3 test result: "$?
        RESULT=$(( $RESULT + $? ))
-       echo $RESULT > test_result
+       exit $RESULT
 
   - &conda_upload
     name: conda_upload
     command: |
        export PATH=$WORKDIR/miniconda/bin:$PATH
-       if [[ `cat test_result` != 0 ]]; then
-          exit 0
-       fi
        export PKG_NAME=thermo
        export USER=cdat
        export VERSION=8.0
@@ -88,7 +85,7 @@ jobs:
       - run: *create_conda_env
       - run: *setup_thermo
       - run: *run_thermo_tests
-      - run: *conda_upload
+       - run: *conda_upload
       - store_artifacts:
           path: tests_html
           destination: tests_html
@@ -118,13 +115,13 @@ jobs:
 
 workflows:
   version: 2
-  thermo:
-    jobs:
-      - macos_thermo
-          filters:
-            branches:
-              only: migrateToCircleCI2
-      - linux_thermo
-          filters:
-            branches:
-              only: migrateToCircleCI2
+    thermo:
+      jobs:
+        - macos_thermo
+            filters:
+              branches:
+                only: migrateToCircleCI2
+        - linux_thermo
+            filters:
+              branches:
+                only: migrateToCircleCI2
