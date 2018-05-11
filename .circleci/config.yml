@@ -49,7 +49,8 @@ aliases:
        python run_tests.py -n 2 -H
        echo "*** py3 test result: "$?
        RESULT=$(( $RESULT + $? ))
-       exit $RESULT
+       #exit $RESULT
+       exit 1
 
   - &conda_upload
     name: conda_upload
