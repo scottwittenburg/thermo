@@ -43,19 +43,55 @@ aliases:
        export UVCDAT_ANONYMOUS_LOG=False
        source activate py2
        python run_tests.py -v2 -n 2 -H
-       PY2_RESULT=$?
-       echo "*** py2 test result: "${PY2_RESULT} 
+       RESULT=$?
+       echo "*** py2 test result: "${RESULT} 
        source activate py3
        python run_tests.py -n 2 -H
-       PY3_RESULT=$?
-       echo "*** py3 test result: "${PY2_RESULT} 
-       if [ $PY2_RESULT -eq 0 -a $PY3_RESULT -eq 0 -a $CIRCLE_BRANCH == "master" ]; then conda install -n root conda-build anaconda-client ; fi
-       if [ $PY2_RESULT -eq 0 -a $PY3_RESULT -eq 0 -a $CIRCLE_BRANCH == "master" ]; then bash ./ci-support/conda_upload.sh ; fi
-       if [ $PY2_RESULT -ne 0 -o $PY3_RESULT -ne 0]; then
-          exit 1
-       fi
+       echo "*** py3 test result: "$?
+       RESULT=$(( $RESULT + $? ))
+       exit $RESULT
+
+  - &conda_upload
+    name: conda_upload
+    command: |
+       export PATH=$WORKDIR/miniconda/bin:$PATH
+       export PKG_NAME=thermo
+       export USER=cdat
+       export VERSION=8.0
+       export LABEL=nightly
+       mkdir conda_build
+       cd conda_build
+       conda install conda-build anaconda-client
+       conda config --set anaconda_upload no
+       export CONDA_BLD_PATH=`pwd`/conda_build
+       git clone git://github.com/cdat/conda-recipes
+       cd conda-recipes
+       python ./prep_for_build -l $VERSION
+       conda build $PKG_NAME -c cdat/label/nightly -c conda-forge -c cdat 
+       conda build $PKG_NAME -c cdat/label/nightly -c conda-forge -c cdat --python=3.6
+       anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l $LABEL $CONDA_BLD_PATH/$OS/$PKG_NAME-$VERSION.`date +%Y*`0.tar.bz2 --force
 
 jobs:
+  deploy_mac:
+    macos:
+      xcode: "9.2.0"
+    environment:
+      WORKDIR: "workspace/test_macos_thermo"
+      OS: "osx-64"
+    steps:
+      - checkout
+      - run: *conda_upload
+
+  deploy_linux:
+    machine:
+      image: circleci/classic:latest
+    environment:
+      WORKDIR: "workspace/test_linux_thermo"
+      OS: "linux-64"
+    steps:
+      - checkout
+      - run: *conda_upload
+
   macos_thermo:
     macos:
       xcode: "9.2.0"
@@ -74,9 +110,39 @@ jobs:
           path: tests_png
           destination: tests_png
 
+  linux_thermo:
+    machine:
+      image: circleci/classic:latest
+    environment:
+      WORKDIR: "workspace/test_linux_thermo"
+    steps:
+      - checkout
+      - run: *setup_miniconda 
+      - run: *create_conda_env
+      - run: *setup_thermo
+      - run: *run_thermo_tests
+      - store_artifacts:
+          path: tests_html
+          destination: tests_html
+      - store_artifacts:
+          path: tests_png
+          destination: tests_png
 
 workflows:
   version: 2
   thermo:
     jobs:
       - macos_thermo
+      - deploy_mac:
+          filters:
+            branches:
+              only: migrateToCircleCI2
+          requires:
+            - macos_thermo
+      - linux_thermo
+      - deploy_linux:
+          filters:
+            branches:
+              only: migrateToCircleCI2
+          requires:
+            - linux_thermo
