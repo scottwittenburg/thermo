@@ -21,7 +21,10 @@ aliases:
        conda update -y -q conda
        conda config --set anaconda_upload no
        conda create -q -n py2 -c cdat/label/nightly -c conda-forge -c cdat cdms2 cdat_info testsrunner  mesalib matplotlib numpy=1.13 vcs "proj4<5" "python<3"
-       conda create -q -n py3 -c cdat/label/nightly -c conda-forge -c cdat cdms2 cdat_info testsrunner  mesalib matplotlib numpy=1.13 vcs "proj4<5" "python>3"
+       conda create -q -n py3 -c cdat/label/nightly -c conda-forge -c cdat cdms2 cdat_info testsrunner  mesalib matplotlib numpy=1.13 vcs "proj4<5" "python>3" coverage coveralls
+
+       conda install -n py2 -c cdat/label/linatest testsrunner
+       conda install -n py3 -c cdat/label/linatest testsrunner
 
   - &setup_thermo
     name: setup_thermo
@@ -44,11 +47,11 @@ aliases:
        source activate py2
        python run_tests.py -v2 -n 2 -H
        RESULT=$?
-       echo "**** py2 test result: "${RESULT} 
+       echo "*** py2 test result: "${RESULT} 
        source activate py3
-       python run_tests.py -n 2 -H
+       python run_tests.py -n 2 -H $COVERAGE
        PY3_RESULT=$?
-       echo "**** py3 test result: "${PY3_RESULT}
+       echo "*** py3 test result: "${PY3_RESULT}
        RESULT=$(( $RESULT + $PY3_RESULT))
        exit $RESULT
 
@@ -72,6 +75,14 @@ aliases:
        conda build $PKG_NAME -c cdat/label/nightly -c conda-forge -c cdat 
        conda build $PKG_NAME -c cdat/label/nightly -c conda-forge -c cdat --python=3.6
        anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l $LABEL $CONDA_BLD_PATH/$OS/$PKG_NAME-$VERSION.`date +%Y*`0.tar.bz2 --force
+
+  - &upload_coverage
+    name: upload_coverage
+    command: |
+       export PATH=$WORKDIR/miniconda/bin:$PATH
+       export UVCDAT_ANONYMOUS_LOG=False
+       source activate py3
+       coveralls
 
 jobs:
 
@@ -101,6 +112,7 @@ jobs:
     environment:
       WORKDIR: "workspace/test_linux_thermo"
       OS: "linux-64"
+      COVERAGE: "-c"
     steps:
       - checkout
       - run: *setup_miniconda 

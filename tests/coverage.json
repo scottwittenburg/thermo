@@ -1,0 +1,4 @@
+{
+   "include": ["thermo", "cdms2", "vcs", "vtk", "cdat_info", "testsrunner"]
+}
+
