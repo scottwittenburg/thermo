@@ -83,6 +83,7 @@ aliases:
        export UVCDAT_ANONYMOUS_LOG=False
        source activate py3
        coveralls
+       source deactivate
 
 jobs:
 
