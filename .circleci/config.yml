@@ -24,9 +24,9 @@ aliases:
        conda update -y -q conda
        conda config --set anaconda_upload no
        if [[ $PY_VER = "py2" ]]; then
-          conda create -q -n $PY_VER $CHANNELS $PKGS "python<3"
+          conda create -q -n $PY_VER $CHANNELS $PKGS $FFMPEG "python<3"
        else
-          conda create -q -n $PY_VER $CHANNELS $PKGS "python>3" coverage coveralls
+          conda create -q -n $PY_VER $CHANNELS $PKGS $FFMPEG "python>3" $COVERAGE_PKGS
        fi
 
   - &setup_thermo
@@ -46,7 +46,7 @@ aliases:
        mkdir tests_png
        mkdir tests_html
        source activate py2
-       python run_tests.py -v2 -n 2 -H
+       python run_tests.py -v2 -n 2 -H $COVERAGE
        RESULT=$?
        echo "*** $PY_VER test result: "${RESULT} 
        exit $RESULT
@@ -63,6 +63,10 @@ aliases:
     name: conda_upload
     environment:
        CHANNELS: "-c cdat/label/nightly -c conda-forge -c cdat"
+       PKG_NAME: "thermo"
+       USER: "cdat"
+       VERSION: "8.0"
+       LABEL: "linatest"
     command: |
        if [[ $CIRCLE_BRANCH != 'add_coverage' ]]; then
           exit 0
@@ -73,10 +77,6 @@ aliases:
        export CONDA_BLD_PATH=`pwd`/conda_build
        git clone git://github.com/cdat/conda-recipes
        cd conda-recipes
-       export PKG_NAME=thermo
-       export USER=cdat
-       export VERSION=8.0
-       export LABEL=linatest
        python ./prep_for_build.py -l $VERSION -b 'add_coverage'
        if [[ $PY_VER = 'py2' ]]; then
           conda build $PKG_NAME $CHANNELS
@@ -90,9 +90,10 @@ jobs:
     macos:
       xcode: "9.2.0"
     environment:
-      WORKDIR: "workspace/test_macos_thermo_py2"
+      WORKDIR: "test_macos_thermo_py2"
       OS: "osx-64"
       PY_VER: "py2"
+      FFMPEG: "'ffmpeg>4' 'libpng>1.6.34'"
     steps:
       - checkout
       - run: *setup_miniconda 
@@ -114,6 +115,7 @@ jobs:
       WORKDIR: "workspace/test_macos_thermo_py3"
       OS: "osx-64"
       PY_VER: "py3"
+      FFMPEG: "'ffmpeg>4' 'libpng>1.6.34'"
     steps:
       - checkout
       - run: *setup_miniconda 
@@ -135,6 +137,7 @@ jobs:
       WORKDIR: "workspace/test_linux_thermo_py2"
       OS: "linux-64"
       PY_VER: "py2"
+      FFMPEG: "ffmpeg"
     steps:
       - checkout
       - run: *setup_miniconda 
@@ -157,7 +160,9 @@ jobs:
       WORKDIR: "workspace/test_linux_thermo_py3"
       OS: "linux-64"
       PY_VER: "py3"
+      FFMPEG: "ffmpeg"
       COVERAGE: "-c tests/coverage.json"
+      COVERAGE_PKGS: "coverage coveralls"
     steps:
       - checkout
       - run: *setup_miniconda 
