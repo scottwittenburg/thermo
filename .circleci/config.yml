@@ -45,7 +45,7 @@ aliases:
        export CDAT_ANONYMOUS_LOG=False
        mkdir tests_png
        mkdir tests_html
-       source activate py2
+       source activate $PY_VER
        python run_tests.py -v2 -n 2 -H $COVERAGE
        RESULT=$?
        echo "*** $PY_VER test result: "${RESULT} 
@@ -66,9 +66,9 @@ aliases:
        PKG_NAME: "thermo"
        USER: "cdat"
        VERSION: "8.0"
-       LABEL: "linatest"
+       LABEL: "nightly"
     command: |
-       if [[ $CIRCLE_BRANCH != 'add_coverage' ]]; then
+       if [[ $CIRCLE_BRANCH != 'master' ]]; then
           exit 0
        fi
        export PATH=${HOME}/project/$WORKDIR/miniconda/bin:$PATH
@@ -77,7 +77,7 @@ aliases:
        export CONDA_BLD_PATH=`pwd`/conda_build
        git clone git://github.com/cdat/conda-recipes
        cd conda-recipes
-       python ./prep_for_build.py -l $VERSION -b 'add_coverage'
+       python ./prep_for_build.py -l $VERSION
        if [[ $PY_VER = 'py2' ]]; then
           conda build $PKG_NAME $CHANNELS
        else
