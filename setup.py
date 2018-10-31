@@ -1,15 +1,27 @@
 #!/usr/bin/env python
-from distutils.core import setup, Extension
-import os, sys, time
-here = os.getcwd()
-os.chdir(os.path.join('..','..','..'))
-#from cdat_configuration import *
-os.chdir(here)
+from setuptools import setup
+from subprocess import Popen, PIPE
+
+Version = "8.0"
+p = Popen(
+    ("git",
+     "describe",
+     "--tags"),
+    stdin=PIPE,
+    stdout=PIPE,
+    stderr=PIPE)
+try:
+    descr = p.stdout.readlines()[0].strip().decode("utf-8")
+    Version = "-".join(descr.split("-")[:-2])
+    if Version == "":
+        Version = descr
+except:
+    descr = Version
 
 setup (name = "thermo",
-       version='8.0',
+       version=descr,
        description = "Package to draw Thermodynamic diagrams with VCS",
-       url = "http://cdat.sf.net",
+       url = "https://github.com/cdat/thermo",
        packages = ['thermo'],
        package_dir = {'thermo': 'Lib'},
        data_files = [("share/thermo",["share/test_data_files.txt"])],
