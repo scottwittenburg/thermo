@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from setuptools import setup
+from setuptools import setup, find_packages
 from subprocess import Popen, PIPE
 
 Version = "8.0"
@@ -20,9 +20,8 @@ except:
 
 setup (name = "thermo",
        version=descr,
+       packages = find_packages(),
        description = "Package to draw Thermodynamic diagrams with VCS",
        url = "https://github.com/cdat/thermo",
-       packages = ['thermo'],
-       package_dir = {'thermo': 'Lib'},
        data_files = [("share/thermo",["share/test_data_files.txt"])],
       )
