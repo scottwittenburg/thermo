@@ -836,13 +836,13 @@ class Gth(object):
         l = self.x.createline()
         l.color = [self.pseudoadiabats.linecolors[0],]
         l.viewport = [template.data.x1, template.data.x2, template.data.y1, template.data.y2]
-        l.worldcoordinate = [self.xmin, self.xmax, self.ymin, self.ymax]
+        l.worldcoordinate = [min(min(xs)), max(max(xs)), self.ymin, self.ymax]
         l.x = xs
         l.y = ys
         self.displays.append(self.x.plot(l, bg=bg))
         t = self.x.createtext()
         t.viewport = [template.data.x1, template.data.x2, template.data.y1, template.data.y2]
-        t.worldcoordinate = [self.xmin, self.xmax, self.ymin, self.ymax]
+        t.worldcoordinate = [min(min(xs)), max(max(xs)), self.ymin, self.ymax]
         t.color = l.color[0]
         t.x = xstxt
         t.y = ystxt
